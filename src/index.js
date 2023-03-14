@@ -7,7 +7,7 @@ import countryListTpl from './markupcoutrylist';
 
 const DEBOUNCE_DELAY = 300;
 
-refs = {
+const refs = {
     inputCountry: document.querySelector('input#search-box'),
     countryList: document.querySelector('.country-list'),
     countryInfo: document.querySelector('.country-info'),
