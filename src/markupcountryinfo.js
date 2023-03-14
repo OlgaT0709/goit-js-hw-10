@@ -4,11 +4,11 @@ export default function countryInfoTpl(country) {
     const lang = Object.values(languages).join(", ");
     
     return `
-    <div class=country-info-head>
-        <img class=country-info-flag src=${svg} alt="flag of ${official}" width=50 height=35 >
-        <p class=country-info-name> ${official}
+    <div >
+        <img class=country-info__flag src=${svg} alt="flag of ${official}" width=50 height=35 >
+        <p class=country-info__name> ${official}
     </div>
-    <ul class=card-info>
+    <ul class=country-info__card>
         <li>
             Capital: ${capital}
         </li>
