@@ -1,7 +1,7 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
-import { fetchCountries, } from './fetchCountries';
+import { fetchCountries } from './fetchCountries';
 import countryInfoTpl from './markupcountryinfo';
 import countryListTpl from './markupcoutrylist';
 
@@ -17,42 +17,31 @@ refs = {
 refs.inputCountry.addEventListener('input', debounce(onInputCountry, DEBOUNCE_DELAY));
 
 function onInputCountry(event) {
-    clearMarkup();
-    // прибираються зайві пробіли
-    const country = event.target.value.trim();
+    clearMarkup(); // стартово прибираємо розмітку
+    const country = event.target.value.trim();// прибираються зайві пробіли
 
-    fetchCountries(country)
-        .then(country => {
-            checkCountryAmount(country);
-            renderCountryInfo(country);          
-        })
-        // якщо краіни не існує, виводимо інфо проце
-        .catch(onError);
+    fetchCountries(country)  
+        .then(renderMarkup) // перевіряємо кількість краін і додаємо розмітку
+        .catch(onError);// якщо краіни не існує, виводимо інфо про це
 };
 
-function renderCountryInfo(country) {
+function renderMarkup(country) {
+// Якщо більше 10 краін, то виводимо інфо, що потрібне більш специфічна назва
+    if(country.length > 10) {
+        Notiflix.Notify.info("Too many matches found. Please enter a more specific name.");
+        return;
+        }
 // Якщо це одна краіна, виводимо по ній інфо
     if (country.length === 1) {
-        Notiflix.Notify.info(' 1 country ')
         const markup = countryInfoTpl(country);
         refs.countryInfo.innerHTML = markup;
         return;
     };
 // Якщо це від 2 до 9 краін, виводимо список країн
     if (country.length > 1 && country.length <= 10) {
-        Notiflix.Notify.info('many countries');
         const markup = countryListTpl(country);
         refs.countryList.insertAdjacentHTML('beforeend', markup)
     }
-}
-
-
-// Якщо більше 10 краін, то потрібне більш специфічна назва
-function checkCountryAmount(country) {
-    if(country.length > 10) {
-        Notiflix.Notify.info("Too many matches found. Please enter a more specific name.");
-        return;
-        };
 }
 
 function onError(error) {
