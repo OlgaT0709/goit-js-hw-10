@@ -1,7 +1,7 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
-import { fetchCountries } from './fetchCountries';
+import fetchCountries from './fetchCountries';
 import countryInfoTpl from './markupcountryinfo';
 import countryListTpl from './markupcoutrylist';
 
@@ -19,6 +19,9 @@ refs.inputCountry.addEventListener('input', debounce(onInputCountry, DEBOUNCE_DE
 function onInputCountry(event) {
     clearMarkup(); // стартово прибираємо розмітку
     const country = event.target.value.trim();// прибираються зайві пробіли
+    if (!country) { // якщо пустая строка, запит не відправляється
+        return;
+    }
 
     fetchCountries(country)  
         .then(renderMarkup) // перевіряємо кількість краін і додаємо розмітку
